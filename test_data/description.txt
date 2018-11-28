@@ -1,0 +1,8 @@
+OSE1cor_2 indoors data from http://iris.usc.edu/Vision-Users/OldUsers/bowu/DatasetWebpage/dataset.html (B)
+
+outdoors sidewalk_174  http://iris.usc.edu/Vision-Users/OldUsers/bowu/DatasetWebpage/dataset.html (A)
+
+
+The three sets are free to use for research purposes. If your publication includes any experimental results obtained on any images from set A/B, please acknowlege the use of the "USC pedestrian set A/B" and reference the following paper:
+Bo Wu, and Ram Nevatia. Detection of Multiple, Partially Occluded Humans in a Single Image by Bayesian Combination of Edgelet Part Detectors. ICCV 2005. 
+

@@ -1,0 +1,11 @@
+===================================
+Configuration Memory information
+===================================
+File Format        BIN
+Interface          SMAPX32
+Size               0M
+Start Address      0x00000000
+End Address        0x0007FFFF
+
+Addr1         Addr2         Date                    File(s)
+0x00000000    0x0004F45B    May 29 20:46:19 2018    Bitstreams/blanking_pblock_filter0_partial.bit

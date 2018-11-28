@@ -1,0 +1,51 @@
+﻿#refernce: http://ivpcl.unm.edu/ivpclpages/Research/drastic/PRWebPage/PR_Sub.php
+source ps7_create.tcl
+-->generate output product 
+-->create hdl wrapper 
+-->synthesis 
+
+/////////////////////////////////////////////
+source synth_reconfig_modules.tcl 
+open_checkpoint Synth/Static/filter_design_wrapper.dcp
+read_checkpoint –cell filter_design_i/ip_lfsr_0/inst/ip_lfsr_v1_0_S00_AXI_inst/st_0/filter0 Synth/reconfig_modules/filter_sobel/sobel_synth.dcp
+set_property HD.RECONFIGURABLE 1 [get_cells filter_design_i/ip_lfsr_0/inst/ip_lfsr_v1_0_S00_AXI_inst/st_0/filter0]
+write_checkpoint -force Checkpoint/top_link_add.dcp
+read_xdc Sources/xdc/fplan.xdc
+select-->tool>drc-->report
+------------------------------------------------------------------------------------------
+opt_design
+place_design
+route_design
+place_design -retarget -propconst -bram_power_opt
+route_design -retarget -propconst -bram_power_opt
+write_checkpoint -force Implement/Config_sobel/top_route_design.dcp
+write_checkpoint -force –cell filter_design_i/ip_lfsr_0/inst/ip_lfsr_v1_0_S00_AXI_inst/st_0/filter0 Checkpoint/filter0_sobel_route_design.dcp
+update_design -cell filter_design_i/ip_lfsr_0/inst/ip_lfsr_v1_0_S00_AXI_inst/st_0/filter0 -black_box
+lock_design -level routing
+write_checkpoint -force Checkpoint/static_route_design.dcp
+read_checkpoint –cell filter_design_i/ip_lfsr_0/inst/ip_lfsr_v1_0_S00_AXI_inst/st_0/filter0 Synth/reconfig_modules/filter_gaussian/gaussian_synth.dcp
+opt_design
+place_design
+route_design
+write_checkpoint -force Implement/Config_gaussian/top_route_design.dcp
+write_checkpoint -force -cell filter_design_i/ip_lfsr_0/inst/ip_lfsr_v1_0_S00_AXI_inst/st_0/filter0 Checkpoint/filter0_gaussian_route_design.dcp
+close_project
+
+open_checkpoint Checkpoint/static_route_design.dcp
+
+update_design -buffer_ports -cell filter_design_i/ip_lfsr_0/inst/ip_lfsr_v1_0_S00_AXI_inst/st_0/filter0
+update_design -buffer_ports -cell filter_design_i/out_resp_0/inst/out_resp_v1_0_S00_AXI_inst/st_0/filter0
+
+place_design
+route_design
+
+write_checkpoint –force Implement/Config_blank/top_route_design.dcp
+
+close_project
+
+pr_verify -initial Implement/Config_sobel/top_route_design.dcp -additional {Implement/Config_gaussian/top_route_design.dcp Implement/Config_blank/top_route_design.dcp}
+
+close_project
+
+source generate_bitstreams.tcl
+
